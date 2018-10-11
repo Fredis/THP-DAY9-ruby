@@ -3,32 +3,44 @@ require 'nokogiri'
 require 'open-uri'
 
 
-#Méthode pour récupérer l'adresse email d'une mairie à partir de sa page
-def get_the_email_of_a_townhall_from_its_webpage(page_url)
+#Méthode pour récupérer l'adresse email d'un député à partir de sa page
+def get_the_email_of_a_deputy_from_its_webpage(page_url)
 	data = Nokogiri::HTML(open(page_url))
 	data.xpath("/html/body/div[3]/div/div/div/section[2]/div/div/div/article/div[4]/section/dl/dd[1]/a").each do |node|
-	return node.text
+
+	mail = node['href']
+	mail_size = mail.size
+	mail = mail.slice(7...mail_size) #L'ensemble nous permet de retirer le substring "mailto:"
+
+	return mail
 	end
 end
 
-#Méthode pour récupérer les liens de pages relatives à chaque mairie et qui exécuter la première méthode sur la base des liens récupérés
-def get_all_the_urls_of_val_doise_townhalls
+#Méthode pour récupérer les liens de pages relatives à chaque député et qui exécuter la première méthode sur la base des liens récupérés
+def get_all_the_urls_of_deputy
 	page_url = "http://www2.assemblee-nationale.fr/deputes/liste/alphabetique"
-	get_townhalls_URL = Nokogiri::HTML(open(page_url))
+	get_deputy_URL = Nokogiri::HTML(open(page_url))
 	array_links = []
-	get_townhalls_URL.css('div#deputes-list a').each do |url| #Solution avec XPATH autrement au-dessus en commentaires, la solution avec CSS
+	get_deputy_URL.css('div#deputes-list li a').each do |url| #Solution avec XPATH
 		link = url['href']
 		link = "http://www2.assemblee-nationale.fr#{link}" #On formatte au bon format d'URL
-		hash_townhall_info = {:name => url.text, :townhall_mail => link} #Création de hash
-		array_links << hash_townhall_info #Ajout du hash dans un tableau
+
+		deputy_name = url.text
+		deputy_name_array = deputy_name.split
+		deputy_name_array = deputy_name_array.drop(1)
+		first_name = deputy_name_array[0]
+		size = deputy_name_array.size
+		last_name = deputy_name_array[1...size].join(" ") #L'ensemble nous permet de séparer en prénom et nom
+
+		hash_deputy_info = {:first_name => first_name, :last_name => last_name, :email => link} #Création de hash
+		array_links << hash_deputy_info #Ajout du hash dans un tableau
 	end
 
-
-	array_links.each do |hash_townhall|
-		hash_townhall[:townhall_mail] = get_the_email_of_a_townhall_from_its_webpage(hash_townhall[:townhall_mail]) #On fait passer les adresses mail dans townhall_mail à la place des URL grâce à la première méthode
+	array_links.each do |hash_deputy|
+		hash_deputy[:email] = get_the_email_of_a_deputy_from_its_webpage(hash_deputy[:email]) #On fait passer les adresses mail dans deputy_mail à la place des URL grâce à la première méthode
 	end	
 	puts array_links
 
 end
 
-get_all_the_urls_of_val_doise_townhalls
+get_all_the_urls_of_deputy
