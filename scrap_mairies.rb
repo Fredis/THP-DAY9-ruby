@@ -6,11 +6,9 @@ $array_with_results = []
 
 #Méthode pour récupérer l'adresse email d'une mairie à partir de sa page
 def get_the_email_of_a_townhall_from_its_webpage(page_url)
-	
 	data = Nokogiri::HTML(open(page_url))
 	data.xpath("/html/body/div[1]/main/section[2]/div/table/tbody/tr[4]/td[2]").each do |node|
-		puts node.text
-		return node.text
+	return node.text
 	end
 end
 
