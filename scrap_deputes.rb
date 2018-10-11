@@ -27,17 +27,17 @@ def get_all_the_urls_of_deputy
 
 		deputy_name = url.text
 		deputy_name_array = deputy_name.split
-		deputy_name_array = deputy_name_array.drop(1)
-		first_name = deputy_name_array[0]
+		deputy_name_array = deputy_name_array.drop(1) #On enlève les "M."/"Mme"
+		first_name = deputy_name_array[0] #On extrait le premier mot du string, soit le prénom
 		size = deputy_name_array.size
-		last_name = deputy_name_array[1...size].join(" ") #L'ensemble nous permet de séparer en prénom et nom
+		last_name = deputy_name_array[1...size].join(" ") #On récupère le nom en prenant les derniers éléments de l'array (pour récupérer les noms composés) et on utilise la méthode .join(" ") pour les mettre dans un string
 
 		hash_deputy_info = {:first_name => first_name, :last_name => last_name, :email => link} #Création de hash
 		array_links << hash_deputy_info #Ajout du hash dans un tableau
 	end
 
 	array_links.each do |hash_deputy|
-		hash_deputy[:email] = get_the_email_of_a_deputy_from_its_webpage(hash_deputy[:email]) #On fait passer les adresses mail dans deputy_mail à la place des URL grâce à la première méthode
+		hash_deputy[:email] = get_the_email_of_a_deputy_from_its_webpage(hash_deputy[:email]) #On fait passer les adresses mail dans email à la place des URL grâce à la première méthode
 	end	
 	puts array_links
 

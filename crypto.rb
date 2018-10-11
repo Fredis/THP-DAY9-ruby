@@ -18,7 +18,7 @@ def coin
     end
     super_array = []
     counter = 0
-    while counter < array_value.size #On créer un array qui contient tous les hashs regroupant le couple currency-price
+    while counter < array_value.size #On créée un array qui contient tous les hashs regroupant le couple currency-price
         hash = {:money => array_names[counter], :price => array_value[counter]}
         super_array << hash
         counter += 1
