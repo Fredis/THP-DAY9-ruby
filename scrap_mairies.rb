@@ -2,7 +2,6 @@ require 'rubygems'
 require 'nokogiri'
 require 'open-uri'
 
-$array_with_results = []
 
 #Méthode pour récupérer l'adresse email d'une mairie à partir de sa page
 def get_the_email_of_a_townhall_from_its_webpage(page_url)
@@ -29,7 +28,7 @@ def get_all_the_urls_of_val_doise_townhalls
 
 
 	array_links.each do |hash_townhall|
-		hash_townhall[:townhall_mail] = get_the_email_of_a_townhall_from_its_webpage(hash_townhall[:townhall_mail])
+		hash_townhall[:townhall_mail] = get_the_email_of_a_townhall_from_its_webpage(hash_townhall[:townhall_mail]) #On fait passer les adresses mail dans townhall_mail à la place des URL grâce à la première méthode
 	end	
 	puts array_links
 
