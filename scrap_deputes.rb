@@ -6,7 +6,7 @@ require 'open-uri'
 #Méthode pour récupérer l'adresse email d'un député à partir de sa page
 def get_the_email_of_a_deputy_from_its_webpage(page_url)
 	data = Nokogiri::HTML(open(page_url))
-	data.xpath("/html/body/div[3]/div/div/div/section[2]/div/div/div/article/div[4]/section/dl/dd[1]/a").each do |node|
+	data.xpath('//*[@id="haut-contenu-page"]/article/div[3]/div/dl/dd[4]/ul/li[1]/a').each do |node|
 
 	mail = node['href']
 	mail_size = mail.size
